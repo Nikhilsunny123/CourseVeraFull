@@ -1,18 +1,40 @@
 const express=require("express");
 const mysql=require("mysql");
-const app=express();
+
 const cors=require("cors");
 const bodyparser=require("body-parser")
 const jwt=require("jsonwebtoken");
 const bcrypt= require('bcrypt');
-const { response } = require("express");
+const cookieParser=require('cookie-parser');
+const session=require('express-session');
+const bodyParser = require("body-parser");
+
+
 const saltRounds=10;
+const app=express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin : ['http://localhost:3000'],
+    methods : ["GET","POST"],
+    credentials :true
+}));
+
+app.use(cookieParser());      //important while using cookie
+app.use(bodyParser.urlencoded({extended:true})); //important while using cookie
 
 
-const jsonParser=bodyparser.json();
+app.use(
+    session({
+      key: "userId",
+      secret: "subscribe",
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        expires: 60 * 60 * 24,
+      },
+    })
+  );
 
 const db=mysql.createConnection({
     user: "root",
@@ -177,6 +199,16 @@ app.delete('/deletecourse/:coursename',(req,res)=>{
 //     })
 // }
 
+app.get("/login",(req,res)=>{
+    if(req.session.user){
+        res.send({loggedLn:true,user:req.session.user})
+    }
+    else 
+    {
+        res.send({loggedLn:false})
+    }
+})
+
 app.post('/login',(req,res)=>{
     const name=req.body.name;
     const password=req.body.password;
@@ -197,7 +229,9 @@ app.post('/login',(req,res)=>{
 
 
                     if(response){
-                        res.send(result)
+                        req.session.name = result;
+                        console.log(req.session.name);
+                        res.send(result);
                     }
                     else
                     {
