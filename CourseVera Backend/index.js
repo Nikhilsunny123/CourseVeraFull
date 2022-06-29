@@ -199,9 +199,39 @@ app.delete('/deletecourse/:coursename',(req,res)=>{
 //     })
 // }
 
+//middleware
+
+const verifyJWT=(req,res,next)=>{
+    const token=req.headers["x-access-token"]
+
+    if(!token){
+        res.send("We need a token , please give")
+    }
+    else
+    {
+        jwt.verify(token,"jwtSecret",(err,decoded)=>
+        {
+            if(err){
+              res.json({auth:false,message:"U failed to authenticate"});  
+            }
+            else
+            {
+                req.id=decoded.id;
+                next();
+            }
+
+        })
+    }
+}
+
+app.get('/isUserAuth',verifyJWT,(req,res)=>{
+
+    res.send("AUthenticated");
+})
+
 app.get("/login",(req,res)=>{
-    if(req.session.user){
-        res.send({loggedLn:true,user:req.session.user})
+    if(req.session.name){
+        res.send({loggedLn:true,user:req.session.name})
     }
     else 
     {
@@ -229,9 +259,15 @@ app.post('/login',(req,res)=>{
 
 
                     if(response){
+
+                        const id=result[0].id
+                        const token=jwt.sign({id},"jwtSecret",{
+                            expiresIn :300,
+                        })
                         req.session.name = result;
-                        console.log(req.session.name);
-                        res.send(result);
+
+                        res.json({auth:true,token:token,result:result})
+                        
                     }
                     else
                     {
