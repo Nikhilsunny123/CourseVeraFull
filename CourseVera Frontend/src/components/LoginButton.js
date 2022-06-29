@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import Axios from 'axios';
 import './Login.css';
 import {Link} from 'react-router-dom';
@@ -13,15 +13,15 @@ function LoginButton() {
   const [password,setPassword]=useState('');
 
   const [LoginStatus,setLoginStatus]=useState('');
+
+  Axios.defaults.withCredentials=true; //for session
   
   const login=(event)=>
   {
      Axios.post('http://localhost:3001/login',
      {name:name,
        password:password
-     }).then(
-      (responce)=>
-      {
+     }).then((responce)=>{
         if(responce.data.message)
         {
           setLoginStatus(responce.data.message);
@@ -30,17 +30,27 @@ function LoginButton() {
         }
         else
         {
-          setLoginStatus(`Login Success`);
+          setLoginStatus(responce.data[0].name)
+          
           console.log("login success");
           setTimeout(()=>{
             history.push('/');
-          },2000)
+          },4000)
         }    
 
-    })
+    });
     
     event.preventDefault();
-  }
+  };
+
+  useEffect(()=>{
+    Axios.get("http://localhost:3001/login").then((responce)=>{
+      if(responce.data.loggedIn===true){
+        setLoginStatus(responce.data.name[0].name)
+      }
+      
+    });
+  },[]);
   return (
     <div>
       
