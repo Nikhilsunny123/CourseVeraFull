@@ -134,6 +134,20 @@ app.get('/coursedetails',(req,res)=>{
     })
 })
 
+app.delete('/deletecourse/:coursename',(req,res)=>{
+    const name=req.body.coursename;
+    
+      const sqlDelete = "DELETE FROM createcourse WHERE coursename= ?";
+    db.query(sqlDelete,name, (err,result)=>{
+        if(err)
+            console.log(err)
+        
+
+    })
+        
+
+})
+
 
 //middleware
 function verifyToken(req,res,next)

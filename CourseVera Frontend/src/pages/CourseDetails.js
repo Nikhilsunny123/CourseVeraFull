@@ -13,11 +13,16 @@ function CourseDetails() {
 
   const history = useHistory();
   
-  const editCourse = () =>{ 
+ /* const editCourse = () =>{ 
     let path = `/edit`; 
     history.push(path);
-  }
+  } */
   const [coursedetails, setCourseDetails] = useState([]);
+
+
+  const deleteCourse =(course)=>{
+    Axios.delete(`http://localhost:3001/deletecourse/${course}`)
+  }
 
   useEffect(() => {
     Axios.get('http://localhost:3001/coursedetails')
@@ -55,7 +60,7 @@ function CourseDetails() {
         </div>
         {coursedetails.map((val)=> {
           return (
-              <Card onClick={editCourse} style={{ width: '18rem'}}>
+              <Card style={{ width: '18rem'}}>
               <Card.Img variant="top" src="" />
                 <Card.Body>
                   <Card.Title className="cardtitle"><label>Name :</label>{val.coursename}</Card.Title>
@@ -69,6 +74,8 @@ function CourseDetails() {
                     <label>Duration :</label>
                   {val.courseduration}
                   </Card.Text>
+                  <Button onClick={()=>deleteCourse(val.coursename)} className="btn btn-outline-dark">Edit </Button>
+                  <Button  className="btn btn-outline-dark">Delete</Button>
                   
                 </Card.Body>
             </Card>
