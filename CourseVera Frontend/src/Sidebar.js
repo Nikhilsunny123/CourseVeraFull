@@ -25,7 +25,7 @@ const Sidebar = () => {
           }
         >
           <a href="/" className="text-decoration-none" style={{color:"inherit"}}>
-            CourseBeta
+            CourseVera
           </a>
         </CDBSidebarHeader>
 
