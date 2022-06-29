@@ -6,6 +6,7 @@ import LoginButton from "./components/LoginButton";
 import Create from "./pages/Create";
 import EditCourse from "./pages/EditCourse";
 import Register from "./components/Register"
+import AccountDetails from "./pages/AccountDetails";
 
 
 const Routes = () => {
@@ -16,6 +17,7 @@ const Routes = () => {
         <Route exact path="/" render={() => <Dashboard/> } />
         <Route path="/coursedetails" component={CourseDetails} />
         <Route path="/register" component={Register} />
+        <Route path="/accountdetails" component={AccountDetails} />
         
         
  

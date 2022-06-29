@@ -51,12 +51,12 @@ function LoginButton() {
       
         <form>
         
-          <label >Username</label>
+          
           <br />
           <input type="text" placeholder='UserName...' onChange={(e)=>{
           setName(e.target.value);
         }}/><br/>
-          <label>Password</label>
+          
           <br />
           <input type="password" placeholder='Password...' onChange={(e)=>{
           setPassword(e.target.value);
