@@ -33,7 +33,7 @@
   }
   
   .card {
-      
+
     cursor: pointer;
     background-color: rgb(85, 193, 184);
   }
@@ -93,4 +93,8 @@
     font-weight: 700;
     letter-spacing: 0.5px;
     color: #002f34;
+  }
+  .text{
+   color: rgb(77, 82, 23);
+   font-weight: 500;
   }

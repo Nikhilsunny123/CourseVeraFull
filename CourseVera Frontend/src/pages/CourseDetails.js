@@ -70,19 +70,19 @@ function CourseDetails() {
                
               <Card.Img variant="top" src="" />
                 <Card.Body>
-                  <Card.Title className="cardtitle"><label>Name :</label>{val.coursename}</Card.Title>
+                  <Card.Title className="cardtitle"><label className="text">Name : </label>{val.coursename}</Card.Title>
                     <Card.Text>
-                    <label>Description :</label> {val.coursecontent}
+                    <label className="text">Description : </label> {val.coursecontent}
                   </Card.Text>
                   <Card.Text>
-                  <label>Price :</label> {val.courseprice}
+                  <label className="text">Price : </label> {val.courseprice}
                   </Card.Text>
                   <Card.Text>
-                    <label>Duration :</label>
+                    <label className="text">Duration : </label>
                   {val.courseduration}
                   </Card.Text>
-                  <Button onClick={()=>deleteCourse(val.coursename)} className="btn btn-outline-dark">Edit </Button>
-                  <Button  className="btn btn-outline-dark">Delete</Button>
+                  <Button  className="btn btn-outline-dark">Edit </Button>
+                  <Button onClick={()=>deleteCourse(val.coursename)} className="btn btn-outline-dark">Delete</Button>
                   
                 </Card.Body>
                 
