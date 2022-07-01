@@ -2,38 +2,14 @@ const express=require("express");
 const mysql=require("mysql");
 
 const cors=require("cors");
-const bodyparser=require("body-parser")
+
 const jwt=require("jsonwebtoken");
 const bcrypt= require('bcrypt');
-const cookieParser=require('cookie-parser');
-const session=require('express-session');
-const bodyParser = require("body-parser");
-
 const saltRounds=10;
 const app=express();
+app.use(cors());
 
 app.use(express.json());
-app.use(
-  cors({
-    origin: ["http://localhost:3000"],
-    methods: ["GET", "POST"],
-    credentials: true,
-  })
-);
-app.use(cookieParser());      //important while using cookie
-app.use(bodyParser.urlencoded({extended:true})); //important while using cookie
-
-app.use(
-    session({
-      key: "userId",
-      secret: "subscribe",
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-        expires: 60 * 60 * 24,
-      },
-    })
-  );
 
 const db=mysql.createConnection({
     user: "root",
@@ -41,29 +17,6 @@ const db=mysql.createConnection({
     password: "password",
     database:"coursebeta",
 });
-
-const verifyJWT=(req,res,next)=>{
-    const token=req.headers["x-access-token"]
-
-    if(!token){
-        res.send("We need a token , please give")
-    }
-    else
-    {
-        jwt.verify(token,"jwtSecret",(err,decoded)=>
-        {
-            if(err){
-              res.json({auth:false,message:"U failed to authenticate"});  
-            }
-            else
-            {
-                req.userId=decoded.id;
-                next();
-            }
-
-        });
-    }
-};
 
 
 app.post('/register',(req,res)=>{
@@ -174,7 +127,7 @@ app.post('/createcourse',(req,res)=>{
     });
 });
 
-app.get('/coursedetails',verifyJWT,(req,res)=>{
+app.get('/coursedetails',(req,res)=>{
 
     db.query(
     "SELECT * FROM createcourse",
@@ -203,69 +156,6 @@ app.delete('/deletecourse/:coursename',(req,res)=>{
 
 })
 
-
-//middleware
-// function verifyToken(req,res,next)
-// {
-//     let authHeader=req.headers.authorization;
-//     if(authHeader==undefined){
-//         res.status(401).send({error:"no token provdied"})
-//     }
-//     let token =authHeader.split(" ")[1]
-//     jwt.verify(token,"secret",function(err,decoded){
-//         if(err){
-//             res.status(500).send({error:"auth failed"})
-//         }
-//         else
-//         {
-//             next();
-//         }
-//     })
-// }
-
-//middleware
-
-<<<<<<< HEAD
-=======
-const verifyJWT=(req,res,next)=>{
-    const token=req.headers["x-access-token"]
-
-    if(!token){
-        res.send("We need a token , please give")
-    }
-    else
-    {
-        jwt.verify(token,"jwtSecret",(err,decoded)=>
-        {
-            if(err){
-              res.json({auth:false,message:"U failed to authenticate"});  
-            }
-            else
-            {
-                req.userId=decoded.id;
-                next();
-            }
-
-        });
-    }
-};
-
->>>>>>> 405207d2a1fc40652553b35ab34f5f792789bfb1
-app.get('/isUserAuth',verifyJWT,(req,res)=>{
-
-    res.send("AUthenticated");
-})
-
-app.get("/login",(req,res)=>{
-    if(req.session.user){
-        res.send({loggedLn:true,user:req.session.user})
-    }
-    else 
-    {
-        res.send({loggedLn:false})
-    }
-})
-
 app.post('/login',(req,res)=>{
     const username=req.body.username;
     const password=req.body.password;
@@ -285,33 +175,20 @@ app.post('/login',(req,res)=>{
                 bcrypt.compare(password,result[0].password,(error,response)=>
                 {
                     if(response){
-
-                        const id=result[0].id
-                        const token=jwt.sign({id},"jwtSecret",{
-                            expiresIn :300,
-                        });
-                        req.session.user = result;
-
-                        res.json({auth: true, token: token, result: result });
                         
+                        res.send(result)
+
                     }
                     else
                     {
-<<<<<<< HEAD
                         res.json({auth: false, message : "Wrong Details" })
-=======
-                        res.json({auth: false, message : "Wrong name/password combination!" })
->>>>>>> 405207d2a1fc40652553b35ab34f5f792789bfb1
          
                     }
+
+
+                    
+                   
                 });
-                        // const resp={
-                        //     id : result[0].id,
-                        //     display_name :result[0].display_name
-                            
-                        // }
-                        // let token=jwt.sign(resp,"secret",{expiresIn:200})
-                        // res.status(200).send({auth:true,token:token});
             }
             else 
             {

@@ -17,30 +17,21 @@ function LoginButton() {
 
   const [LoginStatus,setLoginStatus]=useState("");
 
-  Axios.defaults.withCredentials=true; //for session
 
-  useEffect(()=>{
-    Axios.get("http://localhost:3001/login").then((responce)=>{
-      if(responce.data.loggedIn===true){
-        setLoginStatus(responce.data.username[0].username)
-      }
-      
-    });
-  },[]);
   
   const login = () => {
     Axios.post("http://localhost:3001/login", {
       username:username,
       password:password,
     }).then((response) => {
-      if (!response.data.auth) {
+      if (response.data.message) {
         
         setLoginStatus(<p style={{color:"red"}}>{response.data.message}</p>);
         
       } else {
         
-        localStorage.setItem("token",response.data.token)
-        setLoginStatus('welcome');
+
+        setLoginStatus(response.data[0].username);
         // setTimeout(()=>{
         //   history.push('/');
         // },4000)
@@ -48,14 +39,6 @@ function LoginButton() {
     });
   
   };
-
-  const userAuthenticated=()=>{
-    Axios.get("http://localhost:3001/isUserAuth",{
-      headers:{"x-access-token":localStorage.getItem("token"),},
-        }).then((responce)=>{
-      console.log(responce);
-    })
-  }
 
   return (
     <div>

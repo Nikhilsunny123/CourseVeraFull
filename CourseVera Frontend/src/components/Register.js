@@ -10,7 +10,6 @@ import PhoneInput from 'react-phone-number-input';
 
 export default function Signup() {
 
-  Axios.defaults.withCredentials = true;
 
 
   const [nameReg,setNameReg]=useState('');
