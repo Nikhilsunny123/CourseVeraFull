@@ -174,7 +174,7 @@ app.post('/createcourse',(req,res)=>{
     });
 });
 
-app.get('/coursedetails',(req,res)=>{
+app.get('/coursedetails',verifyJWT,(req,res)=>{
 
     db.query(
     "SELECT * FROM createcourse",
@@ -225,6 +225,32 @@ app.delete('/deletecourse/:coursename',(req,res)=>{
 
 //middleware
 
+<<<<<<< HEAD
+=======
+const verifyJWT=(req,res,next)=>{
+    const token=req.headers["x-access-token"]
+
+    if(!token){
+        res.send("We need a token , please give")
+    }
+    else
+    {
+        jwt.verify(token,"jwtSecret",(err,decoded)=>
+        {
+            if(err){
+              res.json({auth:false,message:"U failed to authenticate"});  
+            }
+            else
+            {
+                req.userId=decoded.id;
+                next();
+            }
+
+        });
+    }
+};
+
+>>>>>>> 405207d2a1fc40652553b35ab34f5f792789bfb1
 app.get('/isUserAuth',verifyJWT,(req,res)=>{
 
     res.send("AUthenticated");
@@ -271,7 +297,11 @@ app.post('/login',(req,res)=>{
                     }
                     else
                     {
+<<<<<<< HEAD
                         res.json({auth: false, message : "Wrong Details" })
+=======
+                        res.json({auth: false, message : "Wrong name/password combination!" })
+>>>>>>> 405207d2a1fc40652553b35ab34f5f792789bfb1
          
                     }
                 });
