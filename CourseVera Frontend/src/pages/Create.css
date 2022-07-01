@@ -7,7 +7,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 6px;
-    background-color: rgb(159, 169, 83);
+    background-color: rgb(151, 225, 246);
   }
   .input {
     border-top-color: transparent;
@@ -29,5 +29,9 @@
     background-color: white;
     color: #002f34;
     border: 2px solid #002f34;
+  }
+  .validation {
+    color: red;
+    background-color: rgb(250, 246, 134,10);
   }
   

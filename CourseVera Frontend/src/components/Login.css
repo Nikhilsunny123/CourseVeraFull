@@ -1,3 +1,4 @@
+
 .loginParentDiv {
     border: 1px solid black;
     width: max-content;
@@ -7,6 +8,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 6px;
+    background-color: rgb(151, 225, 246);
   
   }
   
@@ -36,4 +38,9 @@
     justify-content: center;
     cursor: pointer;
   }
+  .validation {
+    color: red;
+    background-color: bisque;
+  }
+  
   

@@ -9,20 +9,19 @@ const cookieParser=require('cookie-parser');
 const session=require('express-session');
 const bodyParser = require("body-parser");
 
-
 const saltRounds=10;
 const app=express();
 
 app.use(express.json());
-app.use(cors({
-    origin : ['http://localhost:3000'],
-    methods : ["GET","POST"],
-    credentials :true
-}));
-
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 app.use(cookieParser());      //important while using cookie
 app.use(bodyParser.urlencoded({extended:true})); //important while using cookie
-
 
 app.use(
     session({
@@ -42,9 +41,34 @@ const db=mysql.createConnection({
     password: "password",
     database:"coursebeta",
 });
+
+const verifyJWT=(req,res,next)=>{
+    const token=req.headers["x-access-token"]
+
+    if(!token){
+        res.send("We need a token , please give")
+    }
+    else
+    {
+        jwt.verify(token,"jwtSecret",(err,decoded)=>
+        {
+            if(err){
+              res.json({auth:false,message:"U failed to authenticate"});  
+            }
+            else
+            {
+                req.userId=decoded.id;
+                next();
+            }
+
+        });
+    }
+};
+
+
 app.post('/register',(req,res)=>{
 
-    const name=req.body.name;
+    const username=req.body.username;
     const email=req.body.email;
     const phone=req.body.phone;
     const password=req.body.password;
@@ -70,8 +94,8 @@ app.post('/register',(req,res)=>{
               }
               else
               {
-              db.query("SELECT COUNT(*) AS cnt FROM userreg WHERE name = ? ",
-              req.body.name,(err,data)=>
+              db.query("SELECT COUNT(*) AS cnt FROM userreg WHERE username = ? ",
+              req.body.username,(err,data)=>
               {
                   if(err)
                   {
@@ -86,8 +110,8 @@ app.post('/register',(req,res)=>{
                       else
                       {
                           
-                              db.query("INSERT INTO userreg(name,email,phone,password) VALUES (?,?,?,?)",
-                              [name,email,phone,hash],
+                              db.query("INSERT INTO userreg(username,email,phone,password) VALUES (?,?,?,?)",
+                              [username,email,phone,hash],
                               (err,result)=>
                               {
                                   
@@ -201,37 +225,14 @@ app.delete('/deletecourse/:coursename',(req,res)=>{
 
 //middleware
 
-const verifyJWT=(req,res,next)=>{
-    const token=req.headers["x-access-token"]
-
-    if(!token){
-        res.send("We need a token , please give")
-    }
-    else
-    {
-        jwt.verify(token,"jwtSecret",(err,decoded)=>
-        {
-            if(err){
-              res.json({auth:false,message:"U failed to authenticate"});  
-            }
-            else
-            {
-                req.id=decoded.id;
-                next();
-            }
-
-        })
-    }
-}
-
 app.get('/isUserAuth',verifyJWT,(req,res)=>{
 
     res.send("AUthenticated");
 })
 
 app.get("/login",(req,res)=>{
-    if(req.session.name){
-        res.send({loggedLn:true,user:req.session.name})
+    if(req.session.user){
+        res.send({loggedLn:true,user:req.session.user})
     }
     else 
     {
@@ -240,12 +241,12 @@ app.get("/login",(req,res)=>{
 })
 
 app.post('/login',(req,res)=>{
-    const name=req.body.name;
+    const username=req.body.username;
     const password=req.body.password;
 
     db.query(
-    "SELECT * FROM userreg WHERE name = ?;",
-    name,
+    "SELECT * FROM userreg WHERE username = ?;",
+    username,
     (err,result)=>{
         if(err){
             res.send({err:err})
@@ -255,23 +256,23 @@ app.post('/login',(req,res)=>{
             if (result.length>0)
             {
 
-                bcrypt.compare(password,result[0].password,(error,response)=>{
-
-
+                bcrypt.compare(password,result[0].password,(error,response)=>
+                {
                     if(response){
 
                         const id=result[0].id
                         const token=jwt.sign({id},"jwtSecret",{
                             expiresIn :300,
-                        })
-                        req.session.name = result;
+                        });
+                        req.session.user = result;
 
-                        res.json({auth:true,token:token,result:result})
+                        res.json({auth: true, token: token, result: result });
                         
                     }
                     else
                     {
-                        res.send({message :"Wrong name/password combination!"});
+                        res.json({auth: false, message : "Wrong Details" })
+         
                     }
                 });
                         // const resp={
@@ -284,11 +285,12 @@ app.post('/login',(req,res)=>{
             }
             else 
             {
-                res.send({message :"User Doesnt exist"});
+                res.json({auth: false, message : "no user exists" })
             }
         
 
-    });
+        }   
+    );
 });
 
 

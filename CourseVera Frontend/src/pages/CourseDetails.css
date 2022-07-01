@@ -33,14 +33,9 @@
   }
   
   .card {
-    margin-right: 15px;
-    margin-bottom: 2rem;
-    padding: 13px;
-    max-width: 222px;
-    width: 222px;
-    height: 270px;
-    display: inline-block;
+      
     cursor: pointer;
+    background-color: rgb(85, 193, 184);
   }
   
   .card .favorite {

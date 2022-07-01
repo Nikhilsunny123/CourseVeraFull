@@ -10,6 +10,8 @@ import PhoneInput from 'react-phone-number-input';
 
 export default function Signup() {
 
+  Axios.defaults.withCredentials = true;
+
 
   const [nameReg,setNameReg]=useState('');
   const [emailReg,setEmailReg]=useState('');
@@ -74,7 +76,7 @@ export default function Signup() {
                   if(validator.isEmail(emailReg))
                   {
                     Axios.post('http://localhost:3001/register',
-                    { name:nameReg,
+                    { username:nameReg,
                       email:emailReg,
                       phone:value,
                       password:password}).then(

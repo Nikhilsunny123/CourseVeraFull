@@ -6,11 +6,11 @@ import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom';
 import {useHistory} from 'react-router-dom';
 import './CourseDetails.css';
-import Card from 'react-bootstrap/Card'
+import Card from 'react-bootstrap/Card';
 import { useState,useEffect } from 'react';
 
 function CourseDetails() {
-
+  
   const history = useHistory();
   
  /* const editCourse = () =>{ 
@@ -19,21 +19,23 @@ function CourseDetails() {
   } */
   const [coursedetails, setCourseDetails] = useState([]);
 
-
   const deleteCourse =(course)=>{
     Axios.delete(`http://localhost:3001/deletecourse/${course}`)
   }
 
   useEffect(() => {
-    Axios.get('http://localhost:3001/coursedetails')
-
+    Axios.get('http://localhost:3001/coursedetails',
+    
+    // {
+    //   headers:{"x-access-token":localStorage.getItem("token"),},
+    // }
+    )
     .then((responce) => {
       console.log(responce)
       setCourseDetails(responce.data)
     });
    
 }, []);
-
   return (
     
     <div className="d-flex">
@@ -56,11 +58,16 @@ function CourseDetails() {
               </div>
             </div>
           <div>
-          <h3>All Courses</h3>
+          <h2 className="text-center font-weight-bold">All Courses</h2>
+          <br/>
         </div>
-        {coursedetails.map((val)=> {
+        <div className="row">
+        {coursedetails.map((val,key)=> {
           return (
-              <Card style={{ width: '18rem'}}>
+           
+            <div className=" mb-4 col-md-4">
+              <Card className="">
+               
               <Card.Img variant="top" src="" />
                 <Card.Body>
                   <Card.Title className="cardtitle"><label>Name :</label>{val.coursename}</Card.Title>
@@ -78,28 +85,18 @@ function CourseDetails() {
                   <Button  className="btn btn-outline-dark">Delete</Button>
                   
                 </Card.Body>
+                
             </Card>
+            </div>
 
           );
         })}
-
-       
-
-
-
-       
-          
-         
-
-        
-        
+      </div>
       </div>
     </div>
   </div>
   </div>
-     
 
-    
   )
 }
 

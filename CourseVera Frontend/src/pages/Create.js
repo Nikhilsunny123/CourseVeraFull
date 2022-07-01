@@ -2,18 +2,18 @@ import React, { Fragment } from 'react'
 import { useState } from 'react';
 import Axios from 'axios';
 import { Link } from 'react-router-dom';
-
+import { useForm } from "react-hook-form";
 import './Create.css';
 import Navbar from "../Navbar";
 
 function Create() {
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const [courseName,setCourseName]=useState('');
   const [courseContent,setCourseContent]=useState('');
   const [courseDuration,setCourseDuration]=useState('');
 
   const [coursePrice, setCoursePrice] = useState("");
-
 
   const [submitted,setSubmitted]=useState(false);
   const [error,setError]=useState(false);
@@ -30,7 +30,7 @@ function Create() {
   const handleCoursePrice = (e) => {
     setCoursePrice(e.target.value);
   };
-  const handleSubmit=(event)=>
+  const createCourse=(event)=>
   {
     if(courseName==='' || courseContent===''|| courseDuration==='' || coursePrice==='')
         {
@@ -42,7 +42,10 @@ function Create() {
                     { coursename:courseName,
                       coursecontent:courseContent,
                       courseduration:courseDuration,
-                      courseprice:coursePrice}).then(
+                      courseprice:coursePrice},
+                      {
+                        headers:{"x-access-token":localStorage.getItem("token"),},
+                      }).then(
                       (responce)=>
                       {
                         
@@ -53,7 +56,7 @@ function Create() {
                         
                       })
          }             
-         event.preventDefault();
+       
   }
   const successMessage=()=>{
     return (
@@ -76,73 +79,91 @@ function Create() {
     );
   };
   
+  
   return (
     <div>
-      <Navbar/>
+      
       
       
         <div className="centerDiv">
 
         <div className='messages'>
-          {errorMessage()}
-          {successMessage()}
+        
         </div>
-        <form>
+        {errorMessage()}
+          {successMessage()}
+        <form onSubmit={handleSubmit(createCourse)}>
             <h1 style={ {position:'center' ,color :"blue"}}>Add New Course</h1>
 
-            <label htmlFor="fname">Course Name</label>
+            
             <br />
             <input
+             type="text" {...register("coursename", { required: true})}
               className="input"
-              type="text"
+              placeholder='CourseName...'
+             
               id="fname"
-              name="coursename"
+              
               value={courseName}
               onChange={handleCourseName}
-              required
+              
              
             />
             <br />
-            <label htmlFor="fname">Course content</label>
+            {errors.coursename && <p className='validation'>Please Enter the CourseName</p>}
+            
             
               <br />
             <textarea 
-                className="input" rows="5" cols="50" 
-                id="multiLineInput" name='coursecontent'
+             {...register("content", { required: true})}
+                className="input" 
+                placeholder='CourseContent...' 
+                rows="5" cols="50" 
+                id="multiLineInput" 
                 value={courseContent}
               onChange={handleCourseContent}
-                required></textarea>
+             ></textarea>
             <br />
-            <label htmlFor="duration">Course duration</label>
+            {errors.content && <p className='validation'>Please Enter the CourseContent</p>}
+            <br/>
+            
             <br />
             <input 
-             className="input" 
-              type="text"
+            type="text"
+             className="input" {...register("courseduration", { required: true})} 
+              
               value={courseDuration}
               onChange={handleCourseDuration}
+              placeholder='CourseDuration...' 
+            id="duration" 
+            />
+            <br />
+            {errors.courseduration && <p className='validation'>Please Enter the CourseDuration</p>}
+            <br/>
             
-            id="duration" name="courseduration" 
-            required />
             <br />
-
-            <label htmlFor="fname">Price</label>
-            <br />
+      
             <input 
+            type="number" {...register("price", { required: true})}
               className="input" 
-              type="number" 
-              required
+              
+              
               value={coursePrice}
               onChange={handleCoursePrice}
-            
-            id="fname" name="Price" />
+              placeholder='CoursePrice...' 
+            id="fname"  />
             <br />
+            {errors.price && <p className='validation'>Please Enter the Price</p>}
           
           <br />
          
             <button type="submit" onClick={handleSubmit}  className="uploadBtn">Submit</button>
+            <br/>
+            <br/>
+            <h4><Link to="/coursedetails" style={{color:'dark blue' ,position:'center'}}> View All Courses</Link></h4>
             </form>
             <br/>
-            <Link to="/coursedetails" style={{color:'blue'}}>CourseDetails</Link>
+           
         </div>
      
       </div>
