@@ -4,7 +4,7 @@ import Axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import './Create.css';
-import Navbar from "../Navbar";
+
 
 function Create() {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -157,7 +157,7 @@ function Create() {
           
           <br />
          
-            <button type="submit" onClick={handleSubmit}  className="uploadBtn">Submit</button>
+            <button type="submit"  className="uploadBtn">Submit</button>
             <br/>
             <br/>
             <h4><Link to="/coursedetails" style={{color:'dark blue' ,position:'center'}}> View All Courses</Link></h4>

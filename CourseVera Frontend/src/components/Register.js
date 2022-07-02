@@ -4,17 +4,17 @@ import "./Register.css";
 import {Link} from 'react-router-dom';
 import 'react-phone-number-input/style.css';
 import Axios from 'axios';
-import validator from 'validator';
 import PWDRequisite from './PWDRequisite';
 import PhoneInput from 'react-phone-number-input';
+import { useForm } from "react-hook-form";
 
 export default function Signup() {
-
-
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const [nameReg,setNameReg]=useState('');
   const [emailReg,setEmailReg]=useState('');
   const [value,setValue]=useState('');
+  const [LoginStatus,setLoginStatus]=useState("");
 
   const [password, setPassword] = useState("");
   const [pwdRequiste, setPWDRquisite] = useState(false);
@@ -64,49 +64,46 @@ export default function Signup() {
       setSubmitted(false)
   
   }
-  const handleSubmit=(event)=>
+  const handleRegister=()=>
   {
-    if(nameReg==='' || emailReg===''|| value==='' || password==='')
-        {
-          setError(true);
-        }
-        else
-        {
-                  if(validator.isEmail(emailReg))
-                  {
-                    Axios.post('http://localhost:3001/register',
-                    { username:nameReg,
-                      email:emailReg,
-                      phone:value,
-                      password:password}).then(
-                      (responce)=>
-                      {
-                        
-                         
+    {
+      if(nameReg==='' || emailReg===''|| value==='' || password==='')
+          {
+            setError(true);
+            errorMessage(true);
+          }
+      else
+      {
+                      Axios.post('http://localhost:3001/register',
+                      { username:nameReg,
+                        email:emailReg,
+                        phone:value,
+                        password:password}).then(
+                        (responce,err)=>
+                        {
+                          if (responce) {
                             setSubmitted(true);
                             setError(false)
                             console.log(responce);
-                        
-                      })
-                    } 
-                  else
-                  {
-                        setError(true)
-                        setSubmitted(false);
-                        setEmailReg("enter valid email");
-                  }
-           event.preventDefault();
-        }
+                              
+                            setLoginStatus(<p style={{color:"blue",fontweight:"bold"}}>{responce.data.message}</p>);
+                              
+                           
+                          
+                            
+                          }
+                          else
+                          {
+                         console.log("exist")
+                          }
+                          
+                        });
+                      } 
+           
+          }
+          
   }
-  const successMessage=()=>{
-    return (
-      <div className='success'
-      style={{display:submitted ? '' : 'none', }}>
-      <h4 style={{color:"green"}}>User {nameReg} successfully registered</h4>
-      {error}
-    </div>
-    );
-  };
+
   const errorMessage = () => {
     return (
       <div
@@ -124,47 +121,55 @@ export default function Signup() {
       >
         <div className='messages'>
           {errorMessage()}
-          {successMessage()}
+          {LoginStatus}
         </div>
-        <form >
+        <form onSubmit={handleSubmit(handleRegister)}>
           <h3>Create Account</h3>
           <br/>
-          <input type="text" 
+          <input type="text" {...register("name", { required: true})}
           placeholder="enter username" 
-          required
+          
         onChange={handleName} 
         value={nameReg}/><br/>
+        {errors.name && <p className='validation'>Please Enter the username</p>}
         <br/>
         <input type="email"  
-        required
+        {...register("email", {
+          required: "Please Enter the email",
+          pattern: {
+            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+            message: "invalid email address"
+          }
+        })}
         placeholder= "enter email "
         onChange={handleEmail} 
         value={emailReg} 
         />  <br/>
+        {errors.email && <p className='validation'>{errors.email.message}</p>}
         <br/>
         <PhoneInput
-          placeholder="Enter phone number" required
-         
+          value={value} 
+          onChange={setValue}
+          name ="phonenumber"
+          placeholder="Enter phone number"  
+          type="phone" 
           
-          value={value}
-          type="phone"
-          onChange=
-            {
-              setValue
-              }
+          
           />
         <br/>
         <br/>
-           <input type="password"
+           <input type="password" 
+
            placeholder="enter Password.."
            value={password}
             onChange={handleOnChange}
             onFocus={handleOnFocus}
             onBlur={handleOnBlur}
             onKeyUp={handleOnKeyUp}
-            required
+            
        />
        <br/>
+       
        <br/>
        
         {pwdRequiste ? (
@@ -178,7 +183,7 @@ export default function Signup() {
         
         <br/>
         <br/>          
-          <button type="submit" onClick={handleSubmit}>Register</button>
+          <button type="submit">Register</button>
         </form>
         <Link to="/login" style={{color:'blue'}}>Login</Link>
       </div>

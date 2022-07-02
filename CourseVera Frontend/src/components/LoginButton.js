@@ -47,7 +47,6 @@ function LoginButton() {
       <h2>Login</h2> <CloseButton style={{width:"30px" ,height:"30px" , position: "absolute",top: "8px",right: "16px"}} />
     
         <form onSubmit={handleSubmit(login)}>
-        
           <br />
           <input type="text" {...register("name", { required: true})} placeholder='UserName...' onChange={(e)=>{
           setName(e.target.value);

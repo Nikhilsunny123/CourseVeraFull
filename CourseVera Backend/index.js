@@ -65,10 +65,19 @@ app.post('/register',(req,res)=>{
                               db.query("INSERT INTO userreg(username,email,phone,password) VALUES (?,?,?,?)",
                               [username,email,phone,hash],
                               (err,result)=>
-                              {
-                                  
-                                  console.log(err);
-                                  
+                              {  
+                                 if(err){
+                                    
+                  
+                                    console.log(err);
+                               
+        
+                            }
+                            else
+                            {
+                              
+                                res.json({ message : "Registered user" })
+                            }
                                 
                               });
                       }
@@ -100,7 +109,7 @@ app.post('/createcourse',(req,res)=>{
         {
             if(data[0].cnt>0)
             {
-               res.send({message:"existing course"});
+               res.json({message:"existing course"});
             }
             else
             {
@@ -114,7 +123,7 @@ app.post('/createcourse',(req,res)=>{
                                     }
                                     else
                                     {
-                                        res.send({message :"Registered Successfully"});
+                                        res.json({message :"Registered Successfully"});
                                     }
                       });
             }
