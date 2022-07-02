@@ -88,9 +88,6 @@ export default function Signup() {
                               
                             setLoginStatus(<p style={{color:"blue",fontweight:"bold"}}>{responce.data.message}</p>);
                               
-                           
-                          
-                            
                           }
                           else
                           {

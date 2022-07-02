@@ -117,7 +117,7 @@ app.post('/createcourse',(req,res)=>{
                      [coursename,coursecontent,courseduration,courseprice],
                                 (err,result)=>
                                 {
-                                    if(result.body<=0)
+                                    if(err)
                                     {
                                     console.log(err);
                                     }

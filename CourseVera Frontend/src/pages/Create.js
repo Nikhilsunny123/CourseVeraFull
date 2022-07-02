@@ -12,6 +12,7 @@ function Create() {
   const [courseName,setCourseName]=useState('');
   const [courseContent,setCourseContent]=useState('');
   const [courseDuration,setCourseDuration]=useState('');
+  const [LoginStatus,setLoginStatus]=useState("");
 
   const [coursePrice, setCoursePrice] = useState("");
 
@@ -35,6 +36,7 @@ function Create() {
     if(courseName==='' || courseContent===''|| courseDuration==='' || coursePrice==='')
         {
           setError(true);
+          errorMessage(true);
         }
         else
         {
@@ -46,27 +48,25 @@ function Create() {
                       {
                         headers:{"x-access-token":localStorage.getItem("token"),},
                       }).then(
-                      (responce)=>
+                      (responce,err)=>
                       {
-                        
-                         
-                            setSubmitted(true);
-                            setError(false)
-                            console.log(responce);
-                        
+                        if (responce) {
+                        setSubmitted(true);
+                        setError(false)
+                        console.log(responce);
+                          
+                        setLoginStatus(<p style={{color:"blue",fontweight:"bold"}}>{responce.data.message}</p>);
+                          
+                      }
+                      else
+                      {
+                     console.log("exist")
+                      }
                       })
          }             
        
   }
-  const successMessage=()=>{
-    return (
-      <div className='success'
-      style={{display:submitted ? '' : 'none', }}>
-      <h4 style={{color:"green"}}>course {courseName} successfully Added</h4>
-      {error}
-    </div>
-    );
-  };
+
   const errorMessage = () => {
     return (
       <div
@@ -91,7 +91,7 @@ function Create() {
         
         </div>
         {errorMessage()}
-          {successMessage()}
+         {LoginStatus}
         <form onSubmit={handleSubmit(createCourse)}>
             <h1 style={ {position:'center' ,color :"blue"}}>Add New Course</h1>
 
