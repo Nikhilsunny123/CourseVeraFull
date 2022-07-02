@@ -30,7 +30,6 @@ function LoginButton() {
         
       } else {
         
-
         setLoginStatus(response.data[0].username);
         // setTimeout(()=>{
         //   history.push('/');

@@ -3,7 +3,7 @@ import Axios from 'axios';
 import Sidebar from "../Sidebar";
 import Navbar from "../Navbar";
 import Button from 'react-bootstrap/Button'
-import { Link } from 'react-router-dom';
+import { Link,useParams } from 'react-router-dom';
 import {useHistory} from 'react-router-dom';
 import './CourseDetails.css';
 import Card from 'react-bootstrap/Card';
@@ -11,12 +11,9 @@ import { useState,useEffect } from 'react';
 
 function CourseDetails() {
   
-  const history = useHistory();
+  let history = useHistory();
   
- /* const editCourse = () =>{ 
-    let path = `/edit`; 
-    history.push(path);
-  } */
+  
   const [coursedetails, setCourseDetails] = useState([]);
 
   const deleteCourse =(course)=>{
@@ -66,7 +63,7 @@ function CourseDetails() {
           return (
            
             <div className=" mb-4 col-md-4">
-              <Card className="">
+              <Card onClick={()=>{history.push(`/edit/${val.courseid}`)}} >
                
               <Card.Img variant="top" src="" />
                 <Card.Body>
@@ -82,7 +79,7 @@ function CourseDetails() {
                   {val.courseduration}
                   </Card.Text>
                   <Button  className="btn btn-outline-dark">Edit </Button>
-                  <Button onClick={()=>deleteCourse(val.coursename)} className="btn btn-outline-dark">Delete</Button>
+                  
                   
                 </Card.Body>
                 

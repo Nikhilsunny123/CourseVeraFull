@@ -22,7 +22,7 @@ const Routes = () => {
         
  
         <Route path="/create" component={Create} />
-        <Route path="/edit" component={EditCourse} />
+        <Route path="/edit/:id" component={EditCourse} />
         <Route path="/login" component={LoginButton} />
       </BrowserRouter>
     </Fragment>

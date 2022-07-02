@@ -18,7 +18,6 @@ const db=mysql.createConnection({
     database:"coursebeta",
 });
 
-
 app.post('/register',(req,res)=>{
 
     const username=req.body.username;
@@ -81,10 +80,6 @@ app.post('/register',(req,res)=>{
       });
 
     })
-    
-  
-
-
 });
 
 app.post('/createcourse',(req,res)=>{
@@ -128,9 +123,26 @@ app.post('/createcourse',(req,res)=>{
 });
 
 app.get('/coursedetails',(req,res)=>{
-
     db.query(
     "SELECT * FROM createcourse",
+    (err,result)=>{
+        if(err){
+            res.send({err:err})
+        }
+        else {
+            res.send(result);
+        }
+
+    })
+})
+
+app.get('/editcourse/byId/:id',(req,res)=>{
+
+    const id=req.body.courseid; 
+        
+    db.query(
+    "SELECT * FROM createcourse where courseid = ?",
+    req.body.courseid,
     (err,result)=>{
         if(err){
             res.send({err:err})
@@ -149,7 +161,6 @@ app.delete('/deletecourse/:coursename',(req,res)=>{
     db.query(sqlDelete,name, (err,result)=>{
         if(err)
             console.log(err)
-        
 
     })
         
@@ -175,13 +186,13 @@ app.post('/login',(req,res)=>{
                 bcrypt.compare(password,result[0].password,(error,response)=>
                 {
                     if(response){
-                        
+
                         res.send(result)
 
                     }
                     else
                     {
-                        res.json({auth: false, message : "Wrong Details" })
+                        res.json({ message : "Wrong Details" })
          
                     }
 
@@ -192,7 +203,7 @@ app.post('/login',(req,res)=>{
             }
             else 
             {
-                res.json({auth: false, message : "no user exists" })
+                res.json({message : "no user exists" })
             }
         
 

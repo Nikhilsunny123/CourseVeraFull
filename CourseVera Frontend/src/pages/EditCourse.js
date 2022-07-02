@@ -1,8 +1,25 @@
 import React from 'react'
 import Sidebar from "../Sidebar";
 import Navbar from "../Navbar";
+import {useParams} from 'react-router-dom';
+import {useEffect,useState} from 'react';
+import Axios from 'axios';
 
 function EditCourse() {
+  let {id} =useParams();
+  const [editcourse,setEditCourse]=useState({});
+
+  useEffect(()=>{
+    Axios.get(`http://localhost:3001/editcourse/byId/${id}`,
+    )
+    .then((responce) => {
+      console.log(responce)
+      setEditCourse(responce.data)
+      
+    });
+   
+}, []);
+
   return (
     <div>
 
@@ -20,10 +37,9 @@ function EditCourse() {
                <div className="mb-2">
                 <h3> EditCourse</h3>
                     
-
-
-
-
+                <div>
+                  {editcourse.coursename}
+                </div>
 
                </div>
                 </div>
