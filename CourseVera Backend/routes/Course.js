@@ -21,6 +21,20 @@ router.post("/",validateToken,async(req,res)=>{
     res.json(course);
 });
 
+router.put("/title",validateToken,async(req,res)=>{
+    
+  const {newTitle,id}=req.body;
+  await Course.update({title:newTitle},{where:{id:id}})
+  res.json(newTitle);
+});
+
+router.put("/content",validateToken,async(req,res)=>{
+    
+  const {newContent,id}=req.body;
+  await Course.update({content:newContent},{where:{id:id}})
+  res.json(newContent);
+});
+
 router.delete("/:postId", validateToken, async (req, res) => {
     const postId = req.params.postId;
     await Course.destroy({
@@ -31,5 +45,5 @@ router.delete("/:postId", validateToken, async (req, res) => {
   
     res.json("DELETED SUCCESSFULLY");
   });
- 
+
 module.exports=router;

@@ -16,6 +16,7 @@ function LoginButton() {
   
   const [username,setName]=useState('');
   const [password,setPassword]=useState('');
+  const [LoginStatus,setLoginStatus]=useState("");
 
   
   const login = () => {
@@ -23,6 +24,7 @@ function LoginButton() {
     axios.post("http://localhost:3001/auth/login",data).then((response) => {
       if (response.data.error) {
         console.log(response.data.error);
+        setLoginStatus(<p style={{color:"red"}}>{response.data.error}</p>);
      
       } else {
         
@@ -65,7 +67,8 @@ function LoginButton() {
           </br>
         </form>
         <Link to="/register" style={{color:'blue'}}>Signup</Link>
-        
+        <h3 > {LoginStatus}
+              </h3>
         
       </div>
     </div>

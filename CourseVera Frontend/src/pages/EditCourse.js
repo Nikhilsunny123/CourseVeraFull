@@ -18,6 +18,13 @@ function EditCourse() {
 
   let {id} =useParams();
   const [editcourse,setEditCourse]=useState({});
+  const [postObject, setPostObject] = useState({});
+
+
+  //edit
+
+
+
 
   useEffect(()=>{
     if(!localStorage.getItem("accessToken"))
@@ -37,6 +44,7 @@ function EditCourse() {
     
 }, []);
 
+
 const deleteCourse=(id)=> {
   axios
     .delete(`http://localhost:3001/course/${id}`, {
@@ -46,6 +54,40 @@ const deleteCourse=(id)=> {
       history.push("/coursedetails");
     });
   }
+  
+  const editPost = (option) => {
+    if (option === "title") {
+      let newTitle = prompt("Enter New Title:");
+      axios.put(
+        "http://localhost:3001/course/title",
+        {
+          newTitle: newTitle,
+          id: id,
+        },
+        {
+          headers: { accessToken: localStorage.getItem("accessToken") },
+        }
+      );
+
+      setPostObject({ ...postObject, title: newTitle });
+      } 
+      else 
+      {
+      let newPostText = prompt("Enter New Content:");
+      axios.put(
+        "http://localhost:3001/course/content",
+        {
+          newContent: newPostText,
+          id: id,
+        },
+        {
+          headers: { accessToken: localStorage.getItem("accessToken") },
+        }
+      );
+
+      setPostObject({ ...postObject, content: newPostText });
+    }
+  };
 
 
   return (
@@ -87,17 +129,13 @@ const deleteCourse=(id)=> {
                           </tr>
                         </tbody>
                       // </Table> */}
-                      <>
-                          
-                          
-                        </>
+                      
 
-                        <div className="post" id="individual">
-          <div className="title"> {editcourse.title} </div>
-          <div className="body">{editcourse.content}</div>
-          <div className="footer">Price :{editcourse.price}</div>
-          <div className="footer">Duration :
-          {editcourse.duration}
+          <div className="post" id="individual">
+          <div className="title" onClick={()=>editPost("title")}> {postObject.title} </div>
+          <div className="body" onClick={()=>editPost("content")}>{postObject.content}</div>
+          <div className="footer" onClick={()=>editPost("price")}>Price :{postObject.price}</div>
+          <div className="footer"onClick={()=>editPost("duration")}>Duration :{postObject.duration}
             
           </div>
         </div>
