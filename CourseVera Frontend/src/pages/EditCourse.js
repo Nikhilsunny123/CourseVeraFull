@@ -2,27 +2,41 @@ import React from 'react'
 import Sidebar from "../Sidebar";
 import Navbar from "../Navbar";
 import {useParams} from 'react-router-dom';
-import {useEffect,useState} from 'react';
+import {useEffect,useState,useContext} from 'react';
 import Axios from 'axios';
+import {useHistory} from 'react-router-dom';
+import {AuthContext} from '../helpers/AuthContext';
+
 
 function EditCourse() {
+
+
+  const history=useHistory();
+  const{authState}=useContext(AuthContext);
+
   let {id} =useParams();
   const [editcourse,setEditCourse]=useState({});
 
   useEffect(()=>{
-    Axios.get(`http://localhost:3001/editcourse/byId/${id}`,
+    if(!authState.status)
+    {
+      history.push("/login");
+    } 
+    else
+    {
+    Axios.get(`http://localhost:3001/course/byId/${id}`,
     )
     .then((responce) => {
       console.log(responce)
       setEditCourse(responce.data)
       
     });
+  }
    
 }, []);
 
   return (
     <div>
-
        <div className="d-flex">
       <div>
         <Sidebar/>
@@ -35,10 +49,38 @@ function EditCourse() {
               <div className="mt-5 w-100">
                 <div className="create">
                <div className="mb-2">
-                <h3> EditCourse</h3>
-                    
+             
                 <div>
-                  {editcourse.coursename}
+                  <div>
+                  {editcourse.title}
+                  </div>
+                  <div>
+                  {editcourse.content}
+                  </div>
+                  <div>
+                  {editcourse.duration}
+                  </div>
+                  <div>
+                  {editcourse.price}
+                  </div>
+  <table style={{ position: "absolute",
+                    right: "90px",
+                    top:"10px",
+                    color:"black"
+                  }}>
+  <tr>
+    <th>Company</th>
+    <th>Contact</th>
+    <th>Country</th>
+  </tr>
+  <tr>
+    <td>Alfreds Futterkiste</td>
+    <td>Maria Anders</td>
+    <td>Germany</td>
+  </tr>
+  </table>
+                  
+                  
                 </div>
 
                </div>
@@ -53,5 +95,4 @@ function EditCourse() {
     </div>
   )
 }
-
 export default EditCourse

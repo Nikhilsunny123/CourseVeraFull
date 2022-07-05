@@ -7,12 +7,14 @@ import { Link,useParams } from 'react-router-dom';
 import {useHistory} from 'react-router-dom';
 import './CourseDetails.css';
 import Card from 'react-bootstrap/Card';
-import { useState,useEffect } from 'react';
+import { useState,useEffect,useContext} from 'react';
+
+import {AuthContext} from '../helpers/AuthContext';
 
 function CourseDetails() {
   
-  let history = useHistory();
-  
+  const history=useHistory();
+  const{authState}=useContext(AuthContext);
   
   const [coursedetails, setCourseDetails] = useState([]);
 
@@ -21,17 +23,18 @@ function CourseDetails() {
   }
 
   useEffect(() => {
-    Axios.get('http://localhost:3001/coursedetails',
-    
-    // {
-    //   headers:{"x-access-token":localStorage.getItem("token"),},
-    // }
-    )
+    if(!authState.status)
+    {
+      history.push("/login")
+    } 
+    else
+    {
+    Axios.get('http://localhost:3001/course',)
     .then((responce) => {
       console.log(responce)
       setCourseDetails(responce.data)
     });
-   
+  }
 }, []);
   return (
     
@@ -63,24 +66,23 @@ function CourseDetails() {
           return (
            
             <div className=" mb-4 col-md-4">
-              <Card onClick={()=>{history.push(`/edit/${val.courseid}`)}} >
+              <Card onClick={()=>{history.push(`/edit/${val.id}`)}} >
                
               <Card.Img variant="top" src="" />
                 <Card.Body>
-                  <Card.Title className="cardtitle"><label className="text">Name : </label>{val.coursename}</Card.Title>
+                  <Card.Title className="cardtitle"><label className="text">Name : </label>{val.title}</Card.Title>
                     <Card.Text>
-                    <label className="text">Description : </label> {val.coursecontent}
+                    <label className="text">Description : </label> {val.content}
                   </Card.Text>
                   <Card.Text>
-                  <label className="text">Price : </label> {val.courseprice}
+                  <label className="text">Price : </label> {val.price}
                   </Card.Text>
                   <Card.Text>
                     <label className="text">Duration : </label>
-                  {val.courseduration}
+                  {val.duration}
                   </Card.Text>
-                  <Button  className="btn btn-outline-dark">Edit </Button>
-                  
-                  
+                  <Button  className="btn btn-outline-dark">View </Button>
+                
                 </Card.Body>
                 
             </Card>

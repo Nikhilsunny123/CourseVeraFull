@@ -1,12 +1,18 @@
-import React, { Fragment } from 'react'
-import { useState } from 'react';
-import Axios from 'axios';
+import React, { Fragment, useEffect } from 'react'
+import { useState,useContext} from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import './Create.css';
+import {useHistory} from 'react-router-dom';
+import {AuthContext} from '../helpers/AuthContext';
 
 
 function Create() {
+
+  const history=useHistory();
+  const{authState}=useContext(AuthContext);
+
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const [courseName,setCourseName]=useState('');
@@ -31,7 +37,13 @@ function Create() {
   const handleCoursePrice = (e) => {
     setCoursePrice(e.target.value);
   };
-  const createCourse=(event)=>
+
+  useEffect(()=>{
+    if(!authState.status){
+      history.push("/login")
+    }
+  });
+  const createCourse=()=>
   {
     if(courseName==='' || courseContent===''|| courseDuration==='' || coursePrice==='')
         {
@@ -40,27 +52,32 @@ function Create() {
         }
         else
         {
-          Axios.post('http://localhost:3001/createcourse',
-                    { coursename:courseName,
-                      coursecontent:courseContent,
-                      courseduration:courseDuration,
-                      courseprice:coursePrice},
+          axios.post('http://localhost:3001/course',
+                
+                  {           
+                      title:courseName,
+                      content:courseContent,
+                     duration:courseDuration,
+                      price:coursePrice
+                    },
                       {
-                        headers:{"x-access-token":localStorage.getItem("token"),},
-                      }).then(
-                      (responce,err)=>
+                        headers: {
+                          accessToken: localStorage.getItem("accessToken"),
+                        },
+                      }
+                      )
+                      .then(
+                      (responce)=>
                       {
-                        if (responce) {
-                        setSubmitted(true);
-                        setError(false)
-                        console.log(responce);
-                          
-                        setLoginStatus(<p style={{color:"blue",fontweight:"bold"}}>{responce.data.message}</p>);
-                          
+                        if (responce.data.error) {
+                          console.log(responce.data.error)
+                       
                       }
                       else
                       {
-                     console.log("exist")
+                        setSubmitted(true);
+                        setError(false)
+                        console.log(responce);
                       }
                       })
          }             

@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devstart": "nodemon index.js"
+    "start": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,9 +20,13 @@
     "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
     "jsonwebtoken": "^8.5.1",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.21.2",
+    "sequelize-cli": "^6.4.1",
+    "nodemon": "^2.0.18"
   },
   "devDependencies": {
-    "nodemon": "^2.0.18"
+    
   }
 }

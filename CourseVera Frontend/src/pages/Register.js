@@ -75,7 +75,7 @@ export default function Signup() {
           }
       else
       {
-                      Axios.post('http://localhost:3001/auth',
+                      Axios.post('http://localhost:3001/register',
                       { username:nameReg,
                         email:emailReg,
                         phone:value,
