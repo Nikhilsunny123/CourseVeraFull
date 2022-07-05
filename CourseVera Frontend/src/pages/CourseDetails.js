@@ -71,9 +71,7 @@ function CourseDetails() {
               <Card.Img variant="top" src="" />
                 <Card.Body>
                   <Card.Title className="cardtitle"><label className="text">Name : </label>{val.title}</Card.Title>
-                    <Card.Text>
-                    <label className="text">Description : </label> {val.content}
-                  </Card.Text>
+                   
                   <Card.Text>
                   <label className="text">Price : </label> {val.price}
                   </Card.Text>
@@ -81,7 +79,7 @@ function CourseDetails() {
                     <label className="text">Duration : </label>
                   {val.duration}
                   </Card.Text>
-                  <Button  className="btn btn-outline-dark">View </Button>
+                  
                 
                 </Card.Body>
                 

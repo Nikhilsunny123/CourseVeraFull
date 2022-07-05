@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import './Create.css';
+
 import {useHistory} from 'react-router-dom';
 import {AuthContext} from '../helpers/AuthContext';
 
@@ -39,7 +40,8 @@ function Create() {
   };
 
   useEffect(()=>{
-    if(!authState.status){
+    if(!localStorage.getItem("accessToken")){
+      alert("Deleted SuccessFully")
       history.push("/login")
     }
   });

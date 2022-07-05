@@ -1,74 +1,66 @@
-.card {
 
-    cursor: pointer;
-    background-color: rgb(85, 193, 184);
-  }
-  
-  .card .favorite {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-  }
-  
-  .card .image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .card .image img {
-    height: 100px;
-    max-width: 100%;
-    max-height: 100%;
-    min-height: 100%;
-    text-align: center;
-  }
-  .card .content .rate {
-    margin-top: 10px;
-    font-size: larger;
-    font-weight: bold;
-  }
-  .card .content .kilometer {
-    font-size: medium;
-  }
-  .card .content .name {
-    font-size: small;
-  }
-  .card .date {
-    display: flex;
-    justify-content: flex-end;
-    font-size: small;
-  }
-  
-  .recommendations {
-    margin: 16px 16px 24px;
-  }
-  
-  .recommendations .heading span {
-    font-size: 24px;
-    color: #002f34;
-  }
-  .create  {
-    display: flex;
-    position: fixed;
-    top: 20%;
-    right: -5%;
-    margin: 0.5rem;
-    transform: translate(-50%, -50%);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: #002f34;
-  }
   .text{
    color: rgb(77, 82, 23);
    font-weight: 500;
   }
-  .table{
+  /* .table{
     width: max-content;
     padding: 10px;
     position: absolute;
     top: 50%;
     left: 50%;
       
+  } */
+  .post {
+    width: 400px;
+    height: 300px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 300px;
+    border: 1px solid lightgray;
+    font-family: Arial, Helvetica, sans-serif;
+  
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
+  
+  .post:hover {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    cursor: pointer;
+  }
+  .post .title {
+    flex: 20%;
+    border-bottom: 1px solid lightgray;
+    background-color: rgb(28, 66, 105);
+    display: grid;
+    place-content: center;
+    color: white;
+  }
+  
+  .post .body {
+    flex: 60%;
+    display: grid;
+    place-content: center;
+  }
+  
+  .post .footer {
+    flex: 20%;
+    border-top: 1px solid lightgray;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    background-color: rgb(28, 66, 105);
+    color: white;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  
+  
+  .deletebutton, .editbutton {
+    flex: 50%;
+    display: inline-block;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: black;
+    margin: 1px;
   }

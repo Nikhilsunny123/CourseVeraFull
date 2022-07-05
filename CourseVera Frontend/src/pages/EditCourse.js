@@ -9,7 +9,7 @@ import Table from 'react-bootstrap/Table'
 import {useHistory} from 'react-router-dom';
 import {AuthContext} from '../helpers/AuthContext';
 import axios from 'axios';
-
+import './EditCourse.css'
 
 function EditCourse() {
 
@@ -43,7 +43,7 @@ const deleteCourse=(id)=> {
       headers: { accessToken: localStorage.getItem("accessToken") },
     })
     .then(() => {
-      history.push("/");
+      history.push("/coursedetails");
     });
   }
 
@@ -64,7 +64,7 @@ const deleteCourse=(id)=> {
                <div className="mb-2">
              
                 <div>
-                     <Table className='table'  striped bordered hover variant="dark">
+                     {/* <Table className='table'  striped bordered hover variant="dark">
                                     
                         <tbody>
                           <tr>
@@ -83,15 +83,26 @@ const deleteCourse=(id)=> {
                           </tr>
                           <tr>
                             <td>CoursePrice</td>
-                            <td>{editcourse.price}</td>
+                            <td></td>
                           </tr>
                         </tbody>
-                      </Table>
+                      // </Table> */}
                       <>
-                          <Button onClick={()=>{deleteCourse(editcourse.id)}}>Delete</Button>
-                          <Button href="#">Edit</Button>
+                          
                           
                         </>
+
+                        <div className="post" id="individual">
+          <div className="title"> {editcourse.title} </div>
+          <div className="body">{editcourse.content}</div>
+          <div className="footer">Price :{editcourse.price}</div>
+          <div className="footer">Duration :
+          {editcourse.duration}
+            
+          </div>
+        </div>
+        <Button className='deletebutton' onClick={()=>{deleteCourse(editcourse.id)}}>Delete</Button>
+                          <Button className='editbutton' >Edit</Button>
                   
                   
                 </div>
