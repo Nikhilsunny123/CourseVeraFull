@@ -67,9 +67,10 @@ function Navbar() {
           }}  onClick={logout}>Logout</button>
               )}
             <h1 style={{ position: "absolute",
-                    right: "20px",
+                    right: "120px",
                     top:"10px",
-                    color:"black"
+                    color:"black",
+                    backgroundColor:"green"
                   }}>{authState.username}</h1>
               
             </div>

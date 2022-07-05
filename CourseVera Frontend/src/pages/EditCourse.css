@@ -64,3 +64,11 @@
    color: rgb(77, 82, 23);
    font-weight: 500;
   }
+  .table{
+    width: max-content;
+    padding: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+      
+  }

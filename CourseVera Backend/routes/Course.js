@@ -16,9 +16,20 @@ router.get('/byId/:id',async(req,res)=>{
 });
 router.post("/",validateToken,async(req,res)=>{
     
-    const course=req.body
+    const course=req.body;
     await Course.create(course);
     res.json(course);
 });
+
+router.delete("/:postId", validateToken, async (req, res) => {
+    const postId = req.params.postId;
+    await Course.destroy({
+      where: {
+        id: postId,
+      },
+    });
+  
+    res.json("DELETED SUCCESSFULLY");
+  });
  
 module.exports=router;

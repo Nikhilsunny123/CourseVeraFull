@@ -1,4 +1,4 @@
-import React,{useEffect, useState,useContext} from 'react';
+import React,{ useState,useContext} from 'react';
 import axios from 'axios';
 import './Login.css';
 import {Link} from 'react-router-dom';
@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 
 function LoginButton() {
 
-  const history=useHistory();
+  let history=useHistory();
   const{setAuthState}=useContext(AuthContext);
 
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -17,19 +17,22 @@ function LoginButton() {
   const [username,setName]=useState('');
   const [password,setPassword]=useState('');
 
-  const [LoginStatus,setLoginStatus]=useState("");
-
+  
   const login = () => {
     const data = { username: username, password: password };
     axios.post("http://localhost:3001/auth/login",data).then((response) => {
       if (response.data.error) {
-        setLoginStatus(<p style={{color:"red"}}>{response.data.error}</p>);
+        console.log(response.data.error);
      
       } else {
-        localStorage.setItem("accessToken",response.data)
-        setAuthState({username:response.data.username,
-        id:data.id,
-        status:true,});
+        
+        localStorage.setItem("accessToken",response.data.token);
+         setAuthState({
+          username:response.data.username,
+          id:response.data.id,
+          status:true,
+          }); 
+        
         history.push("/")
         
       }
@@ -63,8 +66,7 @@ function LoginButton() {
         </form>
         <Link to="/register" style={{color:'blue'}}>Signup</Link>
         
-        <h1 > {LoginStatus}
-              </h1>
+        
       </div>
     </div>
     </div>

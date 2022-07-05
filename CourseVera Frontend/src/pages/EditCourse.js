@@ -2,29 +2,31 @@ import React from 'react'
 import Sidebar from "../Sidebar";
 import Navbar from "../Navbar";
 import {useParams} from 'react-router-dom';
+import Button from 'react-bootstrap/Button'
 import {useEffect,useState,useContext} from 'react';
-import Axios from 'axios';
+import Table from 'react-bootstrap/Table'
+
 import {useHistory} from 'react-router-dom';
 import {AuthContext} from '../helpers/AuthContext';
+import axios from 'axios';
 
 
 function EditCourse() {
 
-
-  const history=useHistory();
+  let history=useHistory();
   const{authState}=useContext(AuthContext);
 
   let {id} =useParams();
   const [editcourse,setEditCourse]=useState({});
 
   useEffect(()=>{
-    if(!authState.status)
+    if(!localStorage.getItem("accessToken"))
     {
       history.push("/login");
     } 
     else
     {
-    Axios.get(`http://localhost:3001/course/byId/${id}`,
+    axios.get(`http://localhost:3001/course/byId/${id}`,
     )
     .then((responce) => {
       console.log(responce)
@@ -32,8 +34,19 @@ function EditCourse() {
       
     });
   }
-   
+    
 }, []);
+
+const deleteCourse=(id)=> {
+  axios
+    .delete(`http://localhost:3001/course/${id}`, {
+      headers: { accessToken: localStorage.getItem("accessToken") },
+    })
+    .then(() => {
+      history.push("/");
+    });
+  }
+
 
   return (
     <div>
@@ -51,34 +64,34 @@ function EditCourse() {
                <div className="mb-2">
              
                 <div>
-                  <div>
-                  {editcourse.title}
-                  </div>
-                  <div>
-                  {editcourse.content}
-                  </div>
-                  <div>
-                  {editcourse.duration}
-                  </div>
-                  <div>
-                  {editcourse.price}
-                  </div>
-  <table style={{ position: "absolute",
-                    right: "90px",
-                    top:"10px",
-                    color:"black"
-                  }}>
-  <tr>
-    <th>Company</th>
-    <th>Contact</th>
-    <th>Country</th>
-  </tr>
-  <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
-  </tr>
-  </table>
+                     <Table className='table'  striped bordered hover variant="dark">
+                                    
+                        <tbody>
+                          <tr>
+                            <td>CourseName</td>
+                            <td>{editcourse.title}</td>
+                            
+                          </tr>
+                          <tr>
+                            <td>CourseContent</td>
+                            <td>{editcourse.content}</td>
+                            
+                          </tr>
+                          <tr>
+                            <td>CourseDuration</td>
+                            <td>{editcourse.duration}</td>
+                          </tr>
+                          <tr>
+                            <td>CoursePrice</td>
+                            <td>{editcourse.price}</td>
+                          </tr>
+                        </tbody>
+                      </Table>
+                      <>
+                          <Button onClick={()=>{deleteCourse(editcourse.id)}}>Delete</Button>
+                          <Button href="#">Edit</Button>
+                          
+                        </>
                   
                   
                 </div>
