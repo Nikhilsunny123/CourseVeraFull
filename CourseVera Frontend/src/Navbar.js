@@ -11,12 +11,7 @@ function Navbar() {
  
   const{authState,setAuthState}=useContext(AuthContext);
   
-  const logout=()=>{
-    localStorage.removeItem("accessToken");
-    setAuthState({username:"",
-    id:0,
-    status:false,});;
-  }
+  
   useEffect(()=>{
     axios.get('http://localhost:3001/auth/auth',{
       headers:{
@@ -30,7 +25,8 @@ function Navbar() {
       }
       else
       {
-        setAuthState({username:response.data.username,
+        setAuthState({
+        username:response.data.username,
         id:response.data.id,
         status:true,
       });
@@ -38,6 +34,13 @@ function Navbar() {
     });
   
   },[]);
+
+  const logout=()=>{
+    localStorage.removeItem("accessToken");
+    setAuthState({username:"",
+    id:0,
+    status:false,});;
+  }
 
   return (
    
@@ -50,7 +53,6 @@ function Navbar() {
             {!authState.status ? (
             <>
             
-            
             <Button style={{ position: "absolute",
                     right: "30px",
                     top:"10px"
@@ -61,17 +63,26 @@ function Navbar() {
             </Button>
             
             </>
-            )  :( <button style={{ position: "absolute",
-            right: "30px",
-            top:"10px"
-          }}  onClick={logout}>Logout</button>
-              )}
-            <h1 style={{ position: "absolute",
+            )  : ( 
+              <>
+              <h1 style={{ position: "absolute",
                     right: "120px",
                     top:"10px",
                     color:"black",
                     backgroundColor:"green"
                   }}>{authState.username}</h1>
+            
+                 <button style={{ position: "absolute",
+                         right: "30px",
+                         top:"10px"
+                      }}  onClick={logout}>Logout</button>
+                   </> 
+                   )}
+{/*                    
+                   {authState.status && <button style={{ position: "absolute",
+                         right: "30px",
+                         top:"10px"
+                      }} onClick={logout}> Logout</button>} */}
               
             </div>
           </CDBNavbar>

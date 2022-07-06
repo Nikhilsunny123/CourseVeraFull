@@ -18,11 +18,11 @@ function LoginButton() {
   const [password,setPassword]=useState('');
   const [LoginStatus,setLoginStatus]=useState("");
 
-  
   const login = () => {
     const data = { username: username, password: password };
     axios.post("http://localhost:3001/auth/login",data).then((response) => {
-      if (response.data.error) {
+      if (response.data.error) 
+      {
         console.log(response.data.error);
         setLoginStatus(<p style={{color:"red"}}>{response.data.error}</p>);
      
@@ -34,8 +34,11 @@ function LoginButton() {
           id:response.data.id,
           status:true,
           }); 
+          setLoginStatus(<p style={{color:"green"}}>{`Welcome ${response.data.username}`}</p>);
         
-        history.push("/")
+          setTimeout(()=>{
+              history.push('/');
+            },2000)
         
       }
     });
