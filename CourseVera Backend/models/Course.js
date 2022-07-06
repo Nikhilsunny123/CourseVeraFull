@@ -4,19 +4,19 @@ module.exports=(sequelize,DataTypes)=>{
 
         title:{
             type: DataTypes.STRING,
-            allowNull:false,
+            allowNull:true,
         },
         content:{
             type: DataTypes.STRING,
-            allowNull:false,
+            allowNull:true,
         },
         duration:{
             type: DataTypes.STRING,
-            allowNull:false,
+            allowNull:true,
         },
         price:{
             type: DataTypes.STRING,
-            allowNull:false,
+            allowNull:true,
         },
     });
 

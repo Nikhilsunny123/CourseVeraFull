@@ -17,14 +17,12 @@ function EditCourse() {
   const{authState}=useContext(AuthContext);
 
   let {id} =useParams();
-  const [editcourse,setEditCourse]=useState({});
+  // const [editcourse,setEditCourse]=useState({});
   const [postObject, setPostObject] = useState({});
+  //
 
 
   //edit
-
-
-
 
   useEffect(()=>{
     if(!localStorage.getItem("accessToken"))
@@ -37,13 +35,12 @@ function EditCourse() {
     )
     .then((responce) => {
       console.log(responce)
-      setEditCourse(responce.data)
+      setPostObject(responce.data)
       
     });
   }
     
 }, []);
-
 
 const deleteCourse=(id)=> {
   axios
@@ -53,7 +50,7 @@ const deleteCourse=(id)=> {
     .then(() => {
       history.push("/coursedetails");
     });
-  }
+  };
   
   const editPost = (option) => {
     if (option === "title") {
@@ -86,6 +83,40 @@ const deleteCourse=(id)=> {
       );
 
       setPostObject({ ...postObject, content: newPostText });
+    }
+  };
+
+  const editPriceAndDuration = (option) => {
+    if (option === "price") {
+      let newPrice = prompt("Enter New Price:");
+      axios.put(
+        "http://localhost:3001/course/price",
+        {
+          newPrice: newPrice,
+          id: id,
+        },
+        {
+          headers: { accessToken: localStorage.getItem("accessToken") },
+        }
+      );
+
+      setPostObject({ ...postObject, price: newPrice });
+      } 
+      else 
+      {
+      let newDuration = prompt("Enter Duration:");
+      axios.put(
+        "http://localhost:3001/course/duration",
+        {
+          newDuration: newDuration,
+          id: id,
+        },
+        {
+          headers: { accessToken: localStorage.getItem("accessToken") },
+        }
+      );
+
+      setPostObject({ ...postObject, duration: newDuration });
     }
   };
 
@@ -134,13 +165,13 @@ const deleteCourse=(id)=> {
           <div className="post" id="individual">
           <div className="title" onClick={()=>editPost("title")}> {postObject.title} </div>
           <div className="body" onClick={()=>editPost("content")}>{postObject.content}</div>
-          <div className="footer" onClick={()=>editPost("price")}>Price :{postObject.price}</div>
-          <div className="footer"onClick={()=>editPost("duration")}>Duration :{postObject.duration}
+          <div className="footer" onClick={()=>editPriceAndDuration("price")}>Price :{postObject.price}</div>
+          <div className="footer"onClick={()=>editPriceAndDuration("duration")}>Duration :{postObject.duration}
             
           </div>
         </div>
-        <Button className='deletebutton' onClick={()=>{deleteCourse(editcourse.id)}}>Delete</Button>
-                          <Button className='editbutton' >Edit</Button>
+        <Button className='deletebutton' onClick={()=>{deleteCourse(postObject.id)}}>Delete</Button>
+                          
                   
                   
                 </div>

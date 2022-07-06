@@ -35,6 +35,21 @@ router.put("/content",validateToken,async(req,res)=>{
   res.json(newContent);
 });
 
+
+router.put("/price",validateToken,async(req,res)=>{
+    
+  const {newPrice,id}=req.body;
+  await Course.update({price:newPrice},{where:{id:id}})
+  res.json(newPrice);
+});
+
+router.put("/duration",validateToken,async(req,res)=>{
+    
+  const {newContent,id}=req.body;
+  await Course.update({content:newContent},{where:{id:id}})
+  res.json(newContent);
+});
+
 router.delete("/:postId", validateToken, async (req, res) => {
     const postId = req.params.postId;
     await Course.destroy({

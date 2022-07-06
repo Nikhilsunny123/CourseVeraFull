@@ -80,6 +80,7 @@ function Create() {
                         setSubmitted(true);
                         setError(false)
                         console.log(responce);
+                        history.push("/coursedetails")
                       }
                       })
          }             
